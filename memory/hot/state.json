@@ -1,0 +1,69 @@
+{
+  "_schema": "v4.0",
+  "_doc": "SSOT for current system state. AI reads this at boot — do not read anything else until a specific task requires it.",
+  "_updated": "2026-01-01T00:00:00Z",
+  "_updated_by": "pm",
+
+  "project_phase": {
+    "_doc": "Current phase of the project lifecycle",
+    "current": "ideation",
+    "phases": ["ideation", "design", "planning", "development", "testing", "deployment", "maintenance"],
+    "phase_started": null,
+    "next_milestone": "[Fill after onboarding]"
+  },
+
+  "current_sprint": {
+    "id": "S1",
+    "goal": "[Fill sprint goal — 1 sentence]",
+    "started": null,
+    "ends": null,
+    "okr_link": "goals/current/quarter.md → OKR1",
+    "status": "not_started"
+  },
+
+  "task_counts": {
+    "_doc": "Count only — do not read task content. Used for quick status report.",
+    "active": 0,
+    "blocked": 0,
+    "done_this_sprint": 0,
+    "backlog": 0
+  },
+
+  "next_action": {
+    "task_id": null,
+    "description": "[Highest priority task waiting]",
+    "assigned_to": null,
+    "note": ""
+  },
+
+  "blockers_summary": [],
+
+  "context_breadcrumb": {
+    "_doc": "Breadcrumb trail so future sessions never get lost",
+    "last_agent_active": null,
+    "last_task_touched": null,
+    "last_file_modified": null,
+    "last_decision_made": null,
+    "session_count": 0
+  },
+
+  "memory_health": {
+    "_doc": "AI checks at sprint-end and updates",
+    "hot_items": 0,
+    "warm_patterns_count": 0,
+    "last_prune": null,
+    "next_prune": null
+  },
+
+  "git": {
+    "current_branch": null,
+    "last_commit": null,
+    "uncommitted_changes": false
+  },
+
+  "session": {
+    "started": null,
+    "focus": null,
+    "active_agent": "pm"
+  }
+}

@@ -1,0 +1,18 @@
+PROMPT BOOT — First prompt to AI:
+Đây là hệ thống quản lý dự án AI tự hành v4. Hãy boot theo đúng trình tự sau:
+
+1. Đọc và tuân thủ CLAUDE.md (hiến pháp hệ thống)
+2. Đọc INDEX.md (bản đồ toàn hệ thống)  
+3. Đọc memory/hot/state.json (trạng thái hiện tại)
+4. Đọc memory/hot/today.md (context hôm nay)
+
+Sau khi boot xong, xuất Status Report theo format trong BOOT.md.
+KHÔNG đọc bất kỳ file nào khác cho đến khi có task cụ thể.
+
+[Paste toàn bộ nội dung BOOT.md vào đây]
+[Paste toàn bộ nội dung CLAUDE.md vào đây]
+[Paste toàn bộ nội dung INDEX.md vào đây]
+[Paste toàn bộ nội dung state.json vào đây]
+
+Sau khi AI báo "System Ready", gửi tiếp:
+/idea [mô tả idea của bạn ở đây]
