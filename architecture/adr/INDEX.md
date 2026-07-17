@@ -12,6 +12,7 @@
 | ADR-001 | [Example: Choose framework X over Y] | ✅ Accepted | [...] |
 | ADR-002 | [Example: Memory SSOT strategy] | ✅ Accepted | [...] |
 | ADR-003 | Parquet cho dữ liệu thời tiết lịch sử | ✅ Accepted | 2026-07-17 |
+| ADR-004 | Phạm vi 5 năm và phân vùng quý cho dữ liệu thời tiết | ✅ Accepted | 2026-07-17 |
 
 **Status legend:**
 - 🔄 Proposed — Under discussion

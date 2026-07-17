@@ -21,7 +21,7 @@
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
 4. **Current Task:** —
-5. **Current Step:** Pipeline ERA5 2016-2025 đã có resume + verify; tải qua quota hằng ngày bằng automation
+5. **Current Step:** Code tải ERA5 2021-2025 theo quý đã qua test/dry-run; chờ quota mới để tải và verify đủ 180 part
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`
@@ -34,8 +34,8 @@
 ## 📋 Recent Decisions (last 5)
 | When | Decision | By | Reference |
 |------|----------|----|-----------|
+| 2026-07-17 | Scope hackathon giảm còn 2021-2025, phân vùng quý, bỏ wind_gusts_10m | human | ADR-004 |
 | 2026-07-17 | Dữ liệu lịch sử dùng ERA5 + Parquet fact chỉ giữ location_id | human+ai | ADR-003 |
-| 2026-07-17 | Resume tải 10 năm hằng ngày do free API giới hạn 10.000 calls quy đổi/ngày | ai | automation: Resume Điện Biên weather history |
 | 2026-07-17 | Chuẩn hóa thời gian dự báo sang Asia/Ho_Chi_Minh (UTC+7) | human+ai | data/setup_data.ipynb |
 | 2026-07-17 | Ánh xạ đơn vị mới phải theo NQ 1661, không theo các đính chính thứ cấp mâu thuẫn | ai | data/build_locations_db.py |
 | 2026-07-17 | Lưu tọa độ địa danh Điện Biên trong SQLite; notebook không hard-code | human+ai | data/dien_bien_locations.db |

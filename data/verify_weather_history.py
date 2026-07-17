@@ -6,13 +6,24 @@ from pathlib import Path
 import pandas as pd
 import pyarrow.parquet as pq
 
-from download_historical_weather import (
-    HOURLY_VARIABLES,
-    MODEL,
-    TIMEZONE,
-    estimate_rows,
-    validate_existing_part,
-)
+try:
+    from data.download_historical_weather import (
+        HOURLY_VARIABLES,
+        MODEL,
+        TIMEZONE,
+        estimate_rows,
+        quarter_ranges,
+        validate_existing_part,
+    )
+except ModuleNotFoundError:
+    from download_historical_weather import (
+        HOURLY_VARIABLES,
+        MODEL,
+        TIMEZONE,
+        estimate_rows,
+        quarter_ranges,
+        validate_existing_part,
+    )
 
 
 def verify_dataset(
@@ -32,6 +43,8 @@ def verify_dataset(
         )
     if manifest["hourly_variables"] != HOURLY_VARIABLES:
         raise ValueError("Danh sách biến trong manifest không khớp pipeline")
+    if manifest.get("partitioning") != ["year", "q"]:
+        raise ValueError("Dataset phải phân vùng theo year/quarter")
 
     locations = pd.read_parquet(locations_path).sort_values("location_id")
     batch_size = int(manifest["batch_size"])
@@ -39,9 +52,10 @@ def verify_dataset(
     end_year = int(manifest["end_year"])
     expected_parts = (
         math.ceil(len(locations) / batch_size)
+        * 4
         * (end_year - start_year + 1)
     )
-    actual_files = sorted(dataset_path.glob("year=*/part-*.parquet"))
+    actual_files = sorted(dataset_path.glob("year=*/q=*/part-*.parquet"))
     if len(actual_files) != expected_parts:
         raise ValueError(
             f"Thiếu part: có {len(actual_files)}, cần {expected_parts}"
@@ -49,28 +63,26 @@ def verify_dataset(
 
     total_rows = 0
     for year in range(start_year, end_year + 1):
-        expected_hours = estimate_rows(
-            1,
-            f"{year}-01-01",
-            f"{year}-12-31",
-        )
-        for batch_index, start in enumerate(
-            range(0, len(locations), batch_size)
-        ):
-            location_batch = locations.iloc[start : start + batch_size]
-            path = (
-                dataset_path
-                / f"year={year}"
-                / f"part-{batch_index:03d}.parquet"
-            )
-            if not path.exists():
-                raise ValueError(f"Thiếu {path}")
-            validate_existing_part(
-                path,
-                expected_hours,
-                set(location_batch["location_id"].astype(int)),
-            )
-            total_rows += pq.ParquetFile(path).metadata.num_rows
+        for start_date, end_date, quarter_label in quarter_ranges(year):
+            expected_hours = estimate_rows(1, start_date, end_date)
+            for batch_index, start in enumerate(
+                range(0, len(locations), batch_size)
+            ):
+                location_batch = locations.iloc[start : start + batch_size]
+                path = (
+                    dataset_path
+                    / f"year={year}"
+                    / f"q={quarter_label}"
+                    / f"part-{batch_index:03d}.parquet"
+                )
+                if not path.exists():
+                    raise ValueError(f"Thiếu {path}")
+                validate_existing_part(
+                    path,
+                    expected_hours,
+                    set(location_batch["location_id"].astype(int)),
+                )
+                total_rows += pq.ParquetFile(path).metadata.num_rows
 
     expected_rows = estimate_rows(
         len(locations),

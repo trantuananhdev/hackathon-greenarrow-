@@ -1,10 +1,10 @@
 {
   "id": "WEATHER-HISTORY-001",
-  "title": "Thu thập 10 năm dữ liệu thời tiết Điện Biên vào Parquet",
+  "title": "Thu thập 5 năm dữ liệu thời tiết Điện Biên vào Parquet",
   "scope": [
     "Chuyển danh mục 85 địa danh từ SQLite sang Parquet",
-    "Tải dữ liệu ERA5 theo giờ giai đoạn 2016-2025 với đầy đủ biến mưa và gió",
-    "Ghi dữ liệu phân vùng theo năm và hỗ trợ resume",
+    "Tải dữ liệu ERA5 theo giờ giai đoạn 2021-2025 với 7 biến phục vụ hackathon",
+    "Ghi dữ liệu phân vùng theo năm/quý và hỗ trợ resume",
     "Cập nhật notebook đọc dữ liệu Parquet"
   ],
   "results": {}

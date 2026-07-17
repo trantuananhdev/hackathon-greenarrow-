@@ -22,14 +22,16 @@ Các cột trong `dien_bien_locations.parquet`:
 ## Dữ liệu lịch sử
 
 `data/download_historical_weather.py` tải ERA5 theo giờ cho giai đoạn
-2016–2025 và ghi `data/weather_history/year=YYYY/part-NNN.parquet`.
+2021–2025 và ghi
+`data/weather_history/year=YYYY/q=QX/part-NNN.parquet`.
 
 - Múi giờ: `Asia/Ho_Chi_Minh` (`UTC+7`).
 - Số điểm: 85.
-- Số dòng dự kiến: 7.452.120.
+- Số dòng dự kiến: 3.725.040.
 - Model: ERA5, dùng thống nhất cho toàn bộ giai đoạn.
 - Đơn vị và fingerprint cấu hình được lưu trong
   `data/weather_history/_manifest.json`.
+- Mỗi request tải một quý cho tối đa 10 điểm; nghỉ mặc định 60 giây.
 - Part được ghi qua file tạm, kiểm tra số giờ, khóa trùng và biến rỗng trước
   khi publish. Chạy lại lệnh sẽ kiểm tra rồi bỏ qua các part hợp lệ.
 
@@ -44,6 +46,17 @@ python data/build_locations_parquet.py <pasted-text.txt> data/dien_bien_location
 ```powershell
 python data/download_historical_weather.py
 ```
+
+Nếu thư mục output còn manifest/layout cũ không tương thích, chạy một lần:
+
+```powershell
+python data/download_historical_weather.py --reset-incompatible
+```
+
+Flag này chỉ hoạt động khi manifest xác nhận đúng dataset Điện Biên, sau đó xóa
+`_manifest.json` và các file `part-*.parquet` do pipeline tạo. Các file khác,
+kể cả file nằm trong partition `year=YYYY`, được giữ nguyên. Không đặt flag này
+trong notebook; chỉ chạy thủ công sau khi đã xác nhận cần bỏ dataset cũ.
 
 Kiểm tra toàn bộ dataset sau khi tải:
 
