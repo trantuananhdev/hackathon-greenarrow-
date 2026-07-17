@@ -1,0 +1,43 @@
+{
+  "id": "EVENT-DATA-004",
+  "title": "Xác minh DesInventar và tạo cửa sổ ERA5 theo sự kiện",
+  "scope": [
+    "Xác minh artifact DesInventar hoặc nguồn sự kiện thiên tai tương đương cho Điện Biên",
+    "Lập data inventory và schema sự kiện có provenance",
+    "Chỉ tải ERA5 cho cửa sổ trước/trong/sau sự kiện đã xác minh",
+    "Không trộn dữ liệu sự kiện chưa xác minh vào training dataset"
+  ],
+  "acceptance_criteria": [
+    "Nguồn sự kiện, giấy phép và schema được ghi rõ",
+    "Ngày và địa danh Điện Biên được chuẩn hóa nhưng vẫn giữ giá trị gốc",
+    "Event ID ổn định và không trùng",
+    "ERA5 event windows có manifest liên kết event ID",
+    "Có verify gate và test parser",
+    "Nếu không tìm được artifact đáng tin cậy, task ghi rõ blocker và không tạo dữ liệu giả"
+  ],
+  "results": {
+    "commits": [
+      "d3f9d32",
+      "53fdf70"
+    ],
+    "inventory": {
+      "source_records": 1470,
+      "dien_bien_records": 7,
+      "date_range_components": "2001-07-01..2008-08-22",
+      "spatial_precision": "province",
+      "date_verified_events": 0,
+      "era5_weather_windows": 0
+    },
+    "verification": {
+      "full_suite_tests": "56 passed",
+      "focused_p4_tests": "16 passed",
+      "inventory_gate": "7 events, 0 date-verified, 0/0 weather windows",
+      "review": "Final spec and standards reviews found no remaining blocking, high, or medium implementation issues."
+    },
+    "blocker": [
+      "DesInventar day/month components contain default values contradicted by source comments; an independent source is required to verify exact event dates.",
+      "Open-Meteo Archive returned HTTP 429 during both live attempts; no weather part was accepted as complete."
+    ],
+    "resume_command": "python data/download_event_weather.py --events data/desinventar_events.parquet --locations data/event_locations.parquet --output data/event_weather --batch-size 6 --request-delay 60"
+  }
+}

@@ -11,17 +11,17 @@
 - **Focus Area:** Weather analysis — dữ liệu địa danh và Open-Meteo cho Điện Biên
 
 ## 📍 Current Position
-- **Active Task:** EVENT-DATA-004
+- **Active Task:** —
 - **Active Agent:** —
 - **Branch:** (local)
-- **File Being Modified:** data/event_inventory.py
+- **File Being Modified:** —
 
 ## 🔗 Context Chain (read bottom-up for full picture)
 1. **Mission:** AI-first autonomous development + hackathon 48h ops
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
 4. **Current Task:** —
-5. **Current Step:** P3 chốt tại e101b25; P4 tạm dừng để cleanup và review kiến trúc, notebook đã gom về một luồng P0-P3
+5. **Current Step:** P4 parser/inventory đã chốt; task bị block vì 0/7 ngày sự kiện được xác minh và Open-Meteo Archive trả HTTP 429
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`
