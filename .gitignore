@@ -3,6 +3,9 @@ data/weather_history/
 data/weather_history_full/
 data/forecast/
 data/alerts/
+data/flood/
+data/flood_signals.parquet
+data/flood_signals.manifest.json
 data/*_download.log
 data/*_download.error.log
 

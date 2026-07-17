@@ -80,3 +80,10 @@ dataset = ds.dataset(
 )
 preview = dataset.head(100).to_pandas()
 ```
+
+## Điểm sông cho GloFAS
+
+Điểm sông là master độc lập tại `data/river_points.parquet`, dùng
+`river_point_id` thay vì `location_id`. Mười hai điểm hiện tại là node thật lấy từ
+ba OSM ways của Nậm Rốm, Nậm Mức và Nậm Lay; chúng không đại diện cho tâm xã và
+không được dùng để suy ra trực tiếp đơn vị hành chính.

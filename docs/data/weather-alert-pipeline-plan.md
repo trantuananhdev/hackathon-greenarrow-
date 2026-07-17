@@ -94,7 +94,15 @@ ro lấy mức cao nhất trong các điểm cũ trực thuộc, không lấy tr
 
 ## Sau MVP
 
-1. P3 — GloFAS tại các điểm nằm trên mạng lưới sông.
+1. P3 — GloFAS tại các điểm nằm trên mạng lưới sông. **Đã triển khai**:
+   - 12 node thật trên ba OSM ways của Nậm Rốm, Nậm Mức và Nậm Lay;
+   - snapshot 30 ngày, daily, GloFAS v4 seamless qua Open-Meteo Flood API;
+   - output chỉ là `trend_signal`, không có `severity` và luôn mang
+     `is_official_warning=false`;
+   - 12 điểm hiện ánh xạ vào 7 ô GloFAS; output đánh dấu đúng một
+     `is_representative_grid_cell` cho mỗi ô để downstream không đếm trùng;
+   - do grid GloFAS khoảng 5 km có thể chọn nhầm sông gần tọa độ, tín hiệu phải
+     được hiệu chỉnh bằng lịch sử hoặc ngưỡng trạm trước khi dùng cho cảnh báo.
 2. P4 — xác minh DesInventar và tải ERA5 theo cửa sổ sự kiện.
 3. P5 — World Bank stations nếu xác minh được artifact trong 60 phút.
 4. P6 — OWM nếu có API key và P1–P4 đã ổn định.
@@ -112,3 +120,14 @@ ro lấy mức cao nhất trong các điểm cũ trực thuộc, không lấy tr
 - Chạy lại không sinh bản ghi trùng.
 - Lỗi giữa chừng có thể resume.
 - Không ghi API key vào Git, notebook hoặc log.
+
+## Verify gate P3
+
+- River-point master gồm 12 điểm trên ba đường sông OSM, tọa độ là node thật.
+- Flood snapshot đủ 12 `river_point_id`, 30 ngày và không trùng khóa.
+- Lưu lượng không âm, cadence daily, grid cách điểm yêu cầu không quá 20 km.
+- Manifest gắn SHA-256 của river-point master; rerun cùng snapshot skip toàn bộ part.
+- Tín hiệu được recompute xác định từ snapshot và không mang nhãn cảnh báo chính thức.
+
+Nguồn: [Open-Meteo Global Flood API](https://open-meteo.com/en/docs/flood-api),
+[OpenStreetMap copyright và giấy phép ODbL](https://www.openstreetmap.org/copyright).

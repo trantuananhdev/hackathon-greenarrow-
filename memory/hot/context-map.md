@@ -21,7 +21,7 @@
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
 4. **Current Task:** —
-5. **Current Step:** P0-P2 đã chốt tại commit df0e82f; bắt đầu P3 với river points và GloFAS
+5. **Current Step:** P3 live: 12 node thật trên 3 sông, 360 dòng GloFAS/30 ngày, 12 trend signals; đang chạy verify/review
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`

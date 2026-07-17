@@ -1,0 +1,28 @@
+{
+  "dataset": "dien_bien_river_points",
+  "source": "OpenStreetMap API",
+  "source_attribution": "© OpenStreetMap contributors",
+  "license": "ODbL 1.0",
+  "license_url": "https://www.openstreetmap.org/copyright",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "ways": 3,
+  "points_per_way": 4,
+  "points": 12,
+  "osm_way_ids": [
+    279788696,
+    67504081,
+    470292947
+  ],
+  "source_urls": {
+    "279788696": "https://api.openstreetmap.org/api/0.6/way/279788696/full.json",
+    "67504081": "https://api.openstreetmap.org/api/0.6/way/67504081/full.json",
+    "470292947": "https://api.openstreetmap.org/api/0.6/way/470292947/full.json"
+  },
+  "source_sha256_by_way": {
+    "279788696": "a013db071090109529054d9996ddab19f65d502e2d498c573514fb4662887e87",
+    "67504081": "f25c0f38cf00e43cc401d4854cd8b7b297110f80a494793c4f153d65111b753b",
+    "470292947": "a0da8475645a4b0b896275a25b02c4e0492035d4b16d46196ba6ce94c00684ba"
+  },
+  "source_fingerprint_sha256": "f14e36ac92d31795b5ba0e545e5c0469800b13df8b0c3ac611582106a86ce676",
+  "retrieved_at": "2026-07-17T19:46:28.045149+07:00"
+}
