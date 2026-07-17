@@ -32,6 +32,13 @@ Vì vậy cả 7 bản ghi hiện mang `date_precision=unverified_day` và
 `record_eligible_for_era5=false`. Không dùng `fechafec`, vì trường này là
 `2010-06-11` cho cả bảy bản ghi và không phải ngày xảy ra sự kiện.
 
+Đối chiếu báo chí lịch sử cũng cho thấy component date không đáng dùng làm ngày
+chính xác: datacard lũ quét năm 2004 ghi `01/05`, trong khi sự kiện một người chết
+tại Mường Phăng được tường thuật xảy ra sáng `06/07/2004`; datacard lốc/mưa đá ghi
+`01/01/2004`, trong khi báo cáo khí tượng được đăng đầu tháng 4. Tham khảo:
+[VnExpress 07/07/2004](https://vnexpress.net/tin-van-ngay-7-7-2005501.html) và
+[Nhân Dân 06/04/2004](https://nhandan.vn/ket-thuc-thoi-ky-kho-han-keo-dai-post465307.html).
+
 ## Event weather context
 
 Mỗi sự kiện dùng cửa sổ:
