@@ -1,0 +1,13 @@
+{
+  "dataset": "dien_bien_desinventar_events",
+  "source": "DesInventar Sendai",
+  "source_url": "https://www.desinventar.net/DesInventar/download/DI_export_vnm.zip",
+  "source_sha256": "8bbfb7d0dc4443e08962fa167aa34335d0b9722c2627821825dd2a0460cdd200",
+  "retrieved_at": "2026-07-17T20:23:33.169262+07:00",
+  "locations_sha256": "1466c0d4efdf16b2d870c11d215d04f2c4da52ad6858ad590989555642406118",
+  "accepted_rows": 7,
+  "rejected_rows": 1463,
+  "eligibility": "Điện Biên province and complete valid event date",
+  "admin_matching": "accent-insensitive normalized exact match",
+  "rejected_path": "desinventar_events.rejected.parquet"
+}
