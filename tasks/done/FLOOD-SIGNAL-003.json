@@ -16,5 +16,18 @@
     "Output phân biệt rõ dữ liệu GloFAS với cảnh báo hành chính",
     "Unit và integration tests vượt qua"
   ],
-  "results": {}
+  "results": {
+    "commit": "e101b25",
+    "verification": {
+      "tests": "40 full-suite tests passed; 14 focused P3 tests passed",
+      "river_points": 12,
+      "rivers": 3,
+      "forecast_days": 30,
+      "flood_rows": 360,
+      "signals": 12,
+      "representative_grid_cells": 7,
+      "resume": "same snapshot skipped 2 of 2 parts"
+    },
+    "review": "Final spec and standards reviews found no remaining blocking, high, or medium issues."
+  }
 }

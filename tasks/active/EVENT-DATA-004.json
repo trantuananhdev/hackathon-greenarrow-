@@ -1,0 +1,19 @@
+{
+  "id": "EVENT-DATA-004",
+  "title": "Xác minh DesInventar và tạo cửa sổ ERA5 theo sự kiện",
+  "scope": [
+    "Xác minh artifact DesInventar hoặc nguồn sự kiện thiên tai tương đương cho Điện Biên",
+    "Lập data inventory và schema sự kiện có provenance",
+    "Chỉ tải ERA5 cho cửa sổ trước/trong/sau sự kiện đã xác minh",
+    "Không trộn dữ liệu sự kiện chưa xác minh vào training dataset"
+  ],
+  "acceptance_criteria": [
+    "Nguồn sự kiện, giấy phép và schema được ghi rõ",
+    "Ngày và địa danh Điện Biên được chuẩn hóa nhưng vẫn giữ giá trị gốc",
+    "Event ID ổn định và không trùng",
+    "ERA5 event windows có manifest liên kết event ID",
+    "Có verify gate và test parser",
+    "Nếu không tìm được artifact đáng tin cậy, task ghi rõ blocker và không tạo dữ liệu giả"
+  ],
+  "results": {}
+}

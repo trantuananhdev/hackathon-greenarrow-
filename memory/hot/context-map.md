@@ -11,17 +11,17 @@
 - **Focus Area:** Weather analysis — dữ liệu địa danh và Open-Meteo cho Điện Biên
 
 ## 📍 Current Position
-- **Active Task:** FLOOD-SIGNAL-003
+- **Active Task:** EVENT-DATA-004
 - **Active Agent:** —
 - **Branch:** (local)
-- **File Being Modified:** data/download_flood.py
+- **File Being Modified:** data/event_inventory.py
 
 ## 🔗 Context Chain (read bottom-up for full picture)
 1. **Mission:** AI-first autonomous development + hackathon 48h ops
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
 4. **Current Task:** —
-5. **Current Step:** P3 live: 12 node thật trên 3 sông, 360 dòng GloFAS/30 ngày, 12 trend signals; đang chạy verify/review
+5. **Current Step:** P3 chốt tại e101b25; bắt đầu P4 bằng việc xác minh artifact DesInventar/sự kiện trước khi tải ERA5 event windows
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`
