@@ -1,0 +1,38 @@
+{
+    "forecast": [
+        {
+            "title": "Mưa",
+            "probability": 90
+        },
+        {
+            "title": "Nắng nóng gay gắt",
+            "probability": 100
+        },
+        {
+            "title": "Rét đậm, rét hại",
+            "probability": 100
+        }
+    ],
+    "disasters": [
+        {
+            "title": "Lũ quét",
+            "probability": 90
+        },
+        {
+            "title": "Sạt lở đất",
+            "probability": 50
+        },
+        {
+            "title": "Sương mù dày đặc",
+            "probability": 100
+        },
+        {
+            "title": "Nắng nóng gay gắt",
+            "probability": 100
+        },
+        {
+            "title": "Rét đậm, rét hại",
+            "probability": 100
+        }
+    ]
+}
