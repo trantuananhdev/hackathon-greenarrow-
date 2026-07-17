@@ -11,17 +11,17 @@
 - **Focus Area:** Weather analysis — dữ liệu địa danh và Open-Meteo cho Điện Biên
 
 ## 📍 Current Position
-- **Active Task:** WEATHER-HISTORY-001
+- **Active Task:** WEATHER-ALERT-MVP-002
 - **Active Agent:** —
 - **Branch:** (local)
-- **File Being Modified:** data/download_historical_weather.py · data/setup_data.ipynb
+- **File Being Modified:** docs/data/weather-alert-pipeline-plan.md
 
 ## 🔗 Context Chain (read bottom-up for full picture)
 1. **Mission:** AI-first autonomous development + hackathon 48h ops
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
 4. **Current Task:** —
-5. **Current Step:** Code tải ERA5 2021-2025 theo quý đã qua test/dry-run; chờ quota mới để tải và verify đủ 180 part
+5. **Current Step:** Kế hoạch P0→P2 đã được duyệt; bước tiếp theo là data contract, forecast snapshot và alert rules MVP
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`
@@ -34,6 +34,7 @@
 ## 📋 Recent Decisions (last 5)
 | When | Decision | By | Reference |
 |------|----------|----|-----------|
+| 2026-07-17 | Ưu tiên vertical slice Forecast → Risk → Alert; ERA5 bulk chuyển backlog | human | ADR-005 |
 | 2026-07-17 | Scope hackathon giảm còn 2021-2025, phân vùng quý, bỏ wind_gusts_10m | human | ADR-004 |
 | 2026-07-17 | Dữ liệu lịch sử dùng ERA5 + Parquet fact chỉ giữ location_id | human+ai | ADR-003 |
 | 2026-07-17 | Chuẩn hóa thời gian dự báo sang Asia/Ho_Chi_Minh (UTC+7) | human+ai | data/setup_data.ipynb |

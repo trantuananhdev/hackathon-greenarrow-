@@ -1,0 +1,21 @@
+{
+  "id": "WEATHER-ALERT-MVP-002",
+  "title": "Xây dựng vertical slice dự báo và cảnh báo thời tiết Điện Biên",
+  "scope": [
+    "P0: định nghĩa data contract dùng location_id và snapshot_at",
+    "P1: thu thập elevation và forecast snapshot cho 85 điểm hành chính cũ",
+    "P2: tổng hợp dữ liệu theo cửa sổ thời gian và sinh cảnh báo MVP",
+    "Tổng hợp mức rủi ro từ 85 điểm cũ lên 45 đơn vị hành chính mới",
+    "Hiển thị nguyên nhân, ngưỡng và hành động đề xuất cho mỗi cảnh báo"
+  ],
+  "acceptance_criteria": [
+    "Forecast snapshot đủ 85 location_id và hỗ trợ resume",
+    "Không trùng khóa location_id, snapshot_at, valid_time, model",
+    "Mưa được tổng hợp theo rolling 24h và 72h",
+    "Rét được đánh giá theo nhiệt độ trung bình ngày",
+    "Cảnh báo chi tiết theo điểm cũ và tổng hợp theo đơn vị mới",
+    "Chạy lại cùng snapshot không tạo dữ liệu trùng",
+    "Không yêu cầu hoàn tất ERA5 bulk trước khi demo"
+  ],
+  "results": {}
+}
