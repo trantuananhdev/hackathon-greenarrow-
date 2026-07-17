@@ -11,17 +11,17 @@
 - **Focus Area:** Weather analysis — dữ liệu địa danh và Open-Meteo cho Điện Biên
 
 ## 📍 Current Position
-- **Active Task:** WEATHER-ALERT-MVP-002
+- **Active Task:** FLOOD-SIGNAL-003
 - **Active Agent:** —
 - **Branch:** (local)
-- **File Being Modified:** docs/data/weather-alert-pipeline-plan.md
+- **File Being Modified:** data/download_flood.py
 
 ## 🔗 Context Chain (read bottom-up for full picture)
 1. **Mission:** AI-first autonomous development + hackathon 48h ops
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
 4. **Current Task:** —
-5. **Current Step:** P0-P2 đã chạy live; verify 85 điểm, 30/45 đơn vị có location, 15 đơn vị được đánh dấu unavailable
+5. **Current Step:** P0-P2 đã chốt tại commit df0e82f; bắt đầu P3 với river points và GloFAS
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`

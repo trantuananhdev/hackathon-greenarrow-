@@ -1,0 +1,20 @@
+{
+  "id": "FLOOD-SIGNAL-003",
+  "title": "Bổ sung tín hiệu lũ GloFAS cho Điện Biên",
+  "scope": [
+    "Xây dựng danh mục điểm đại diện nằm trên mạng lưới sông, không dùng mù quáng tâm đơn vị hành chính",
+    "Thu thập lưu lượng sông dự báo từ Open-Meteo Flood API theo snapshot",
+    "Lưu Parquet có provenance, atomic write, validation và resume",
+    "Tạo tín hiệu lũ bổ trợ có giải thích; không gọi là cảnh báo chính thức khi chưa hiệu chỉnh ngưỡng địa phương",
+    "Tích hợp verify gate và notebook"
+  ],
+  "acceptance_criteria": [
+    "Mỗi river_point_id có tọa độ, tên sông hoặc mô tả lưu vực và nguồn",
+    "Snapshot đủ toàn bộ river_point_id và không trùng khóa",
+    "Thời gian timezone-aware và lưu lượng không âm",
+    "Chạy lại cùng snapshot không tạo dữ liệu trùng",
+    "Output phân biệt rõ dữ liệu GloFAS với cảnh báo hành chính",
+    "Unit và integration tests vượt qua"
+  ],
+  "results": {}
+}

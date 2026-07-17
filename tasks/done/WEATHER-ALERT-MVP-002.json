@@ -17,5 +17,18 @@
     "Chạy lại cùng snapshot không tạo dữ liệu trùng",
     "Không yêu cầu hoàn tất ERA5 bulk trước khi demo"
   ],
-  "results": {}
+  "results": {
+    "commit": "df0e82f",
+    "verification": {
+      "tests": "28 passed",
+      "forecast_rows": 32640,
+      "forecast_locations": 85,
+      "forecast_parts": 6,
+      "alert_detail_rows": 102,
+      "overview_units": 45,
+      "covered_units": 30,
+      "unavailable_units": 15
+    },
+    "review": "Spec and standards reviews found no remaining blocking, high, or medium issues."
+  }
 }
