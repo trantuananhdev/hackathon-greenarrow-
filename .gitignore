@@ -1,0 +1,13 @@
+# Generated weather datasets and download logs
+data/weather_history/
+data/weather_history_full/
+data/*_download.log
+data/*_download.error.log
+
+# Superseded local SQLite artifact (Parquet is the current source)
+data/dien_bien_locations.db
+data/.cache*
+
+# Python caches
+__pycache__/
+*.py[cod]

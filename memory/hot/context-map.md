@@ -8,20 +8,20 @@
 ## 🗺️ Project Position
 - **Phase:** ideation (template) — hackathon pipeline ready + continuous execute
 - **Sprint:** S1 — not_started
-- **Focus Area:** Workflow system itself (claude-code-workflow-v4)
+- **Focus Area:** Weather analysis — dữ liệu địa danh và Open-Meteo cho Điện Biên
 
 ## 📍 Current Position
-- **Active Task:** none
+- **Active Task:** WEATHER-HISTORY-001
 - **Active Agent:** —
 - **Branch:** (local)
-- **File Being Modified:** docs/onboarding/HUONG-DAN-SU-DUNG.md · WORKFLOW.md Phase 7
+- **File Being Modified:** data/download_historical_weather.py · data/setup_data.ipynb
 
 ## 🔗 Context Chain (read bottom-up for full picture)
 1. **Mission:** AI-first autonomous development + hackathon 48h ops
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
 4. **Current Task:** —
-5. **Current Step:** Master usage guide + Phase 7 auto-next; chờ đề bài + PROJECT.md thật
+5. **Current Step:** Pipeline ERA5 2016-2025 đã có resume + verify; tải qua quota hằng ngày bằng automation
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`
@@ -34,6 +34,11 @@
 ## 📋 Recent Decisions (last 5)
 | When | Decision | By | Reference |
 |------|----------|----|-----------|
+| 2026-07-17 | Dữ liệu lịch sử dùng ERA5 + Parquet fact chỉ giữ location_id | human+ai | ADR-003 |
+| 2026-07-17 | Resume tải 10 năm hằng ngày do free API giới hạn 10.000 calls quy đổi/ngày | ai | automation: Resume Điện Biên weather history |
+| 2026-07-17 | Chuẩn hóa thời gian dự báo sang Asia/Ho_Chi_Minh (UTC+7) | human+ai | data/setup_data.ipynb |
+| 2026-07-17 | Ánh xạ đơn vị mới phải theo NQ 1661, không theo các đính chính thứ cấp mâu thuẫn | ai | data/build_locations_db.py |
+| 2026-07-17 | Lưu tọa độ địa danh Điện Biên trong SQLite; notebook không hard-code | human+ai | data/dien_bien_locations.db |
 | 2026-07-17 | Phase 7 auto-next sau /done | human+ai | WORKFLOW.md |
 | 2026-07-17 | Master guide HUONG-DAN-SU-DUNG | human+ai | docs/onboarding/ |
 | 2026-07-17 | Unify hackathon to 7-phase WORKFLOW SSOT | human+ai | WORKFLOW.md |
@@ -41,5 +46,6 @@
 ## 🔀 Recent Context Switches
 | When | From | To | Reason |
 |------|------|----|--------|
+| 2026-07-17 | Danh sách 12 điểm hard-code | SQLite gồm 85 đơn vị cũ | Giữ chi tiết không gian và ánh xạ tên mới–cũ |
 | 2026-07-17 | Review hệ thống | Master guide + auto-next | Đảm bảo Enter → hoàn thành |
 | 2026-07-17 | 3-stage skill vs 6-phase WORKFLOW | single 7-phase WORKFLOW | đồng nhất thi 48h |
