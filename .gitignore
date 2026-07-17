@@ -1,6 +1,8 @@
 # Generated weather datasets and download logs
 data/weather_history/
 data/weather_history_full/
+data/forecast/
+data/alerts/
 data/*_download.log
 data/*_download.error.log
 

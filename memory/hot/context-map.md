@@ -21,7 +21,7 @@
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
 4. **Current Task:** —
-5. **Current Step:** Kế hoạch P0→P2 đã được duyệt; bước tiếp theo là data contract, forecast snapshot và alert rules MVP
+5. **Current Step:** P0-P2 đã chạy live; verify 85 điểm, 30/45 đơn vị có location, 15 đơn vị được đánh dấu unavailable
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`

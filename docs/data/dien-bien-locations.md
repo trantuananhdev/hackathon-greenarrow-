@@ -19,6 +19,10 @@ Các cột trong `dien_bien_locations.parquet`:
 - `latitude`, `longitude`: tọa độ điểm đại diện của đơn vị cũ.
 - `coordinate_reference`: mô tả ý nghĩa và độ chính xác của tọa độ.
 
+File hiện có 85 điểm hành chính cũ nhưng chỉ phủ 30/45 đơn vị mới theo Nghị
+quyết 1661/NQ-UBTVQH15. Pipeline cảnh báo không suy diễn dữ liệu cho 15 đơn vị
+thiếu; các đơn vị này được đánh dấu `missing_location_data`.
+
 ## Dữ liệu lịch sử
 
 `data/download_historical_weather.py` tải ERA5 theo giờ cho giai đoạn

@@ -1,0 +1,9 @@
+{
+  "dataset": "dien_bien_location_features",
+  "source": "Open-Meteo Elevation API",
+  "elevation_source": "copernicus_dem_90m",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "locations": 85,
+  "locations_sha256": "1466c0d4efdf16b2d870c11d215d04f2c4da52ad6858ad590989555642406118",
+  "retrieved_at": "2026-07-17T19:11:34.329160+07:00"
+}

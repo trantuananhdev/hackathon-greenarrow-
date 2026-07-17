@@ -13,8 +13,10 @@ Việc tải ERA5 bulk không còn là điều kiện tiên quyết.
 ## Nguyên tắc dữ liệu
 
 - `location_id` là khóa join xuyên suốt.
-- Locations master gồm 85 điểm đại diện cho đơn vị hành chính cũ, ánh xạ sang
-  45 đơn vị mới; chưa chứa polygon ranh giới.
+- Locations master gồm 85 điểm đại diện cho đơn vị hành chính cũ, hiện ánh xạ
+  được 30/45 đơn vị mới; chưa chứa polygon ranh giới. Overview vẫn có đủ 45
+  đơn vị theo Nghị quyết 1661, nhưng 15 đơn vị thiếu location được đánh dấu
+  `missing_location_data`, không được coi là trạng thái bình thường.
 - Forecast được lưu theo snapshot và không ghi đè.
 - Khóa forecast là `location_id + snapshot_at + valid_time + model`.
 - `issued_at` chỉ dùng khi biết thời điểm model được phát hành thực sự.
@@ -74,6 +76,10 @@ Rule chạy trên dữ liệu đã aggregate, không chạy trực tiếp trên 
 - mưa kéo dài: tín hiệu cần theo dõi, không khẳng định dự báo sạt lở;
 - gió: phân biệt tốc độ gió duy trì và gió giật.
 
+Rule MVP dùng tốc độ gió duy trì trên 60 km/h và gió giật trên 75 km/h làm
+ngưỡng sàng lọc ban đầu. Đây chưa phải cảnh báo chính thức; `rule_version` được
+lưu cùng output để có thể hiệu chỉnh mà không làm mất dấu ngưỡng đã sử dụng.
+
 Mỗi cảnh báo phải chứa:
 
 - địa điểm và khoảng thời gian hiệu lực;
@@ -82,8 +88,9 @@ Mỗi cảnh báo phải chứa:
 - thông điệp tiếng Việt và hành động đề xuất;
 - nguồn dữ liệu và phiên bản rule.
 
-Cảnh báo giữ chi tiết cho 85 điểm cũ. Mức của 45 đơn vị mới lấy mức rủi ro cao
-nhất trong các điểm cũ trực thuộc, không lấy trung bình.
+Cảnh báo giữ chi tiết cho 85 điểm cũ. Với 30 đơn vị mới đã có location, mức rủi
+ro lấy mức cao nhất trong các điểm cũ trực thuộc, không lấy trung bình. Mười lăm
+đơn vị còn thiếu tọa độ có severity `unavailable`.
 
 ## Sau MVP
 
