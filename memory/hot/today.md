@@ -23,8 +23,9 @@ Master: docs/onboarding/HUONG-DAN-SU-DUNG.md
 ## ✅ Completed Today
 - Unify WORKFLOW + skill + command + INDEX + brief — 01:41
 - Review toàn hệ thống + HUONG-DAN-SU-DUNG + Phase 7 auto-next — 02:24
+- Added dataset loader helper and verified parquet loading for dien_bien_locations.parquet — 03:06
 
 ## 🔄 Handoff (for next session)
 - In progress: (none)
-- Next up: Điền PROJECT.md + hackathon-brief.md → /hackathon
-- Important context: Chỉ tin WORKFLOW.md + INDEX sống; P7 paste 1 lần/track
+- Next up: Use data/load_dataset.py to load other parquet assets or wire the loader into downstream scripts
+- Important context: Verified loader via `python -m unittest -v data.load_dataset_test`; dataset path resolved from data/dien_bien_locations.parquet
