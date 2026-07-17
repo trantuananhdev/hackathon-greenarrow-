@@ -13,6 +13,7 @@ from data.download_event_weather import (
     download_event_weather,
     event_window,
     responses_to_frame,
+    validate_configuration,
     validate_event_part,
 )
 
@@ -36,6 +37,7 @@ def event_frame() -> pd.DataFrame:
             "source_name": ["DesInventar"],
             "source_record_id": ["original-1"],
             "source_url": ["https://example.test/events/1"],
+            "record_eligible_for_era5": [True],
         }
     )
 
@@ -58,6 +60,12 @@ def api_response(latitude: float, longitude: float) -> dict:
 
 
 class EventWeatherTest(unittest.TestCase):
+    def test_invalid_dry_run_configuration_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "batch_size"):
+            validate_configuration(0, 0, 72, 48)
+        with self.assertRaisesRegex(ValueError, "Batch/window"):
+            validate_configuration(10, 0, -1, 48)
+
     def test_window_is_exact_and_training_eligibility_precedes_event(self):
         start, event_at, end = event_window("2024-08-10", 72, 48)
         self.assertEqual(start.isoformat(), "2024-08-07T00:00:00+07:00")
@@ -97,7 +105,15 @@ class EventWeatherTest(unittest.TestCase):
             pd.Timestamp("2026-07-17 12:00", tz=TIMEZONE),
         ).drop(index=10)
         with self.assertRaisesRegex(ValueError, "121"):
-            validate_event_part(frame, "evt-001", {1}, start, end)
+            validate_event_part(
+                frame,
+                "evt-001",
+                locations,
+                start,
+                event_at,
+                end,
+                "province",
+            )
 
     def test_validation_rejects_distant_grid_and_null_weather(self):
         locations = locations_frame(1)

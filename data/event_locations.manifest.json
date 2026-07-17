@@ -3,5 +3,6 @@
   "source_locations_sha256": "1466c0d4efdf16b2d870c11d215d04f2c4da52ad6858ad590989555642406118",
   "rows": 12,
   "selection_method": "deterministic_farthest_point_v1",
-  "selection_purpose": "Spatial context for province-level events; never independent labels"
+  "selection_purpose": "Spatial context for province-level events; never independent labels",
+  "artifact_sha256": "ed2e10880807c98f800b08ff90ec327bad3a0e5fdb029043dd988e8547234262"
 }

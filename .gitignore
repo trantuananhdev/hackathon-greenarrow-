@@ -6,6 +6,9 @@ data/alerts/
 data/flood/
 data/flood_signals.parquet
 data/flood_signals.manifest.json
+data/raw/desinventar/
+data/desinventar_events.rejected.parquet
+data/event_weather/
 data/*_download.log
 data/*_download.error.log
 

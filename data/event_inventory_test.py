@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 
 import pandas as pd
 
-from data.download_desinventar import materialize_desinventar
+from data.download_desinventar import download_atomic, materialize_desinventar
 from data.event_inventory import build_event_inventory, parse_desinventar_xml
 
 
@@ -19,7 +19,7 @@ XML = """<?xml version="1.0" encoding="UTF-8"?>
     <serial>DB-1</serial><evento>FLOOD</evento><lugar>Noong Bua</lugar>
     <level0>DIEN BIEN</level0><fechano>2024</fechano><fechames>8</fechames>
     <fechadia>11</fechadia><muertos>2</muertos><afectados></afectados>
-    <fuente>Provincial report</fuente></TR>
+    <fuente>Provincial report</fuente><di_comments>August flood</di_comments></TR>
   <TR><serial>DB-2</serial><evento>LANDSLIDE</evento><lugar>Unknown place</lugar>
     <level0>Điện Biên</level0><fechano>2023</fechano><fechames>7</fechames>
     <fuente>Archive</fuente></TR>
@@ -51,6 +51,7 @@ class EventInventoryTest(unittest.TestCase):
         self.assertEqual(rows[0]["raw_hazard"], "FLOOD")
         self.assertEqual(rows[0]["raw_admin_unit"], "Noong Bua")
         self.assertEqual(rows[0]["raw_source"], "Provincial report")
+        self.assertEqual(rows[0]["raw_comments"], "August flood")
 
     def test_inventory_filters_province_and_quarantines_incomplete_date(self):
         frame, rejected = build_event_inventory(
@@ -66,6 +67,8 @@ class EventInventoryTest(unittest.TestCase):
         self.assertEqual(event["old_admin_unit"], "Phường Noong Bua")
         self.assertEqual(event["new_admin_unit"], "Phường Mường Thanh")
         self.assertEqual(event["event_date"], pd.Timestamp("2024-08-11"))
+        self.assertEqual(event["date_precision"], "unverified_day")
+        self.assertFalse(bool(event["record_eligible_for_era5"]))
         self.assertEqual(event["deaths"], 2)
         self.assertTrue(pd.isna(event["affected"]))
         self.assertEqual(set(rejected["rejection_reason"]), {
@@ -123,6 +126,25 @@ class EventInventoryTest(unittest.TestCase):
                     source_url="https://example.test/events.xml",
                     expected_sha256="0" * 64,
                 )
+
+    def test_download_does_not_publish_unverified_bytes(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "source.xml"
+            source.write_bytes(XML)
+            destination = root / "raw.xml"
+            destination.write_bytes(b"previous verified artifact")
+            with unittest.mock.patch(
+                "data.download_desinventar.urllib.request.urlopen",
+                return_value=source.open("rb"),
+            ):
+                with self.assertRaisesRegex(ValueError, "SHA-256"):
+                    download_atomic(
+                        "https://example.test/source.xml",
+                        destination,
+                        "0" * 64,
+                    )
+            self.assertEqual(destination.read_bytes(), b"previous verified artifact")
 
 
 def parse_desinventar_xml_bytes(content):

@@ -35,7 +35,11 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def download_atomic(url: str, destination: Path) -> None:
+def download_atomic(
+    url: str,
+    destination: Path,
+    expected_sha256: str,
+) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_suffix(destination.suffix + ".tmp")
     request = urllib.request.Request(
@@ -45,6 +49,12 @@ def download_atomic(url: str, destination: Path) -> None:
         with urllib.request.urlopen(request, timeout=120) as response:
             with temporary.open("wb") as output:
                 shutil.copyfileobj(response, output, length=1024 * 1024)
+        actual_sha256 = file_sha256(temporary)
+        if actual_sha256.casefold() != expected_sha256.casefold():
+            raise ValueError(
+                "Downloaded source SHA-256 mismatch: "
+                f"expected {expected_sha256}, got {actual_sha256}"
+            )
         temporary.replace(destination)
     finally:
         temporary.unlink(missing_ok=True)
@@ -68,15 +78,12 @@ def _xml_from_source(source: Path, work_dir: Path) -> Path:
         return output
 
 
-def _write_parquet_atomic(frame: pd.DataFrame, path: Path) -> None:
+def _stage_parquet(frame: pd.DataFrame, path: Path) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
-    try:
-        frame.to_parquet(temporary, index=False, compression="zstd")
-        pd.read_parquet(temporary)
-        temporary.replace(path)
-    finally:
-        temporary.unlink(missing_ok=True)
+    frame.to_parquet(temporary, index=False, compression="zstd")
+    pd.read_parquet(temporary)
+    return temporary
 
 
 def materialize_desinventar(
@@ -105,8 +112,8 @@ def materialize_desinventar(
     rejected_path = output_path.with_name(
         f"{output_path.stem}.rejected{output_path.suffix}"
     )
-    _write_parquet_atomic(events, output_path)
-    _write_parquet_atomic(rejected, rejected_path)
+    temporary_output = _stage_parquet(events, output_path)
+    temporary_rejected = _stage_parquet(rejected, rejected_path)
     manifest = {
         "dataset": "dien_bien_desinventar_events",
         "source": "DesInventar Sendai",
@@ -116,9 +123,17 @@ def materialize_desinventar(
         "locations_sha256": file_sha256(locations_path),
         "accepted_rows": len(events),
         "rejected_rows": len(rejected),
-        "eligibility": "Điện Biên province and complete valid event date",
+        "eligibility": (
+            "Điện Biên inventory only; ERA5 requires independent day-level "
+            "date verification"
+        ),
+        "era5_eligible_rows": int(
+            events["record_eligible_for_era5"].astype(bool).sum()
+        ),
         "admin_matching": "accent-insensitive normalized exact match",
         "rejected_path": rejected_path.name,
+        "accepted_sha256": file_sha256(temporary_output),
+        "rejected_sha256": file_sha256(temporary_rejected),
     }
     manifest_path = output_path.with_suffix(".manifest.json")
     temporary = manifest_path.with_suffix(".json.tmp")
@@ -127,8 +142,12 @@ def materialize_desinventar(
             json.dumps(manifest, ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
+        temporary_output.replace(output_path)
+        temporary_rejected.replace(rejected_path)
         temporary.replace(manifest_path)
     finally:
+        temporary_output.unlink(missing_ok=True)
+        temporary_rejected.unlink(missing_ok=True)
         temporary.unlink(missing_ok=True)
     return events, rejected
 
@@ -149,7 +168,7 @@ def main() -> None:
         "--output", type=Path, default=Path("data/desinventar_events.parquet")
     )
     args = parser.parse_args()
-    download_atomic(args.url, args.raw)
+    download_atomic(args.url, args.raw, args.sha256)
     events, rejected = materialize_desinventar(
         args.raw, args.locations, args.output, args.url, args.sha256
     )

@@ -27,6 +27,7 @@ ALIASES = {
     "raw_day": ("fechadia", "day", "dia"),
     "raw_date": ("fecha", "date", "event_date"),
     "raw_source": ("fuente", "fuentes", "source", "sources"),
+    "raw_comments": ("di_comments", "comments", "comment"),
     "deaths": ("muertos", "deaths", "dead"),
     "injured": ("heridos", "injured"),
     "missing": ("desaparece", "missing"),
@@ -42,6 +43,8 @@ ALIAS_LOOKUP = {
 EVENT_COLUMNS = [
     "event_id",
     "event_date",
+    "date_precision",
+    "record_eligible_for_era5",
     "hazard",
     "province",
     "spatial_precision",
@@ -69,6 +72,7 @@ EVENT_COLUMNS = [
     "raw_month",
     "raw_day",
     "raw_source",
+    "raw_comments",
     "source_sha256",
     "retrieved_at",
 ]
@@ -267,6 +271,12 @@ def build_event_inventory(
         record = {
             "event_id": _event_id(row),
             "event_date": event_date,
+            "date_precision": (
+                "unverified_day"
+                if event_date is not None
+                else "month_or_year_incomplete"
+            ),
+            "record_eligible_for_era5": False,
             "hazard": normalize_hazard(row["raw_hazard"]),
             "province": "Điện Biên" if province_is_dien_bien else row["raw_province"],
             "spatial_precision": "province",

@@ -103,7 +103,13 @@ ro lấy mức cao nhất trong các điểm cũ trực thuộc, không lấy tr
      `is_representative_grid_cell` cho mỗi ô để downstream không đếm trùng;
    - do grid GloFAS khoảng 5 km có thể chọn nhầm sông gần tọa độ, tín hiệu phải
      được hiệu chỉnh bằng lịch sử hoặc ngưỡng trạm trước khi dùng cho cảnh báo.
-2. P4 — xác minh DesInventar và tải ERA5 theo cửa sổ sự kiện.
+2. P4 — xác minh DesInventar và tải ERA5 theo cửa sổ sự kiện. **Đang triển khai**:
+   - đã khóa ZIP Việt Nam bằng SHA-256 và chuẩn hóa 7 sự kiện Điện Biên;
+   - cả 7 sự kiện chỉ có spatial precision cấp tỉnh, không được nhân thành nhãn cấp xã;
+   - đã tạo 12 điểm đại diện không gian và downloader cửa sổ `-72h..+48h`;
+   - review phát hiện ngày dạng `01/01` có thể là giá trị mặc định; cả 7 event đang
+     `record_eligible_for_era5=false` cho tới khi có nguồn độc lập xác minh ngày;
+   - lần tải thử gặp HTTP 429 nhưng không có part nào được công nhận hoàn chỉnh.
 3. P5 — World Bank stations nếu xác minh được artifact trong 60 phút.
 4. P6 — OWM nếu có API key và P1–P4 đã ổn định.
 5. P7 — NCHMF nếu còn thời gian.

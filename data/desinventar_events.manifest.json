@@ -3,11 +3,14 @@
   "source": "DesInventar Sendai",
   "source_url": "https://www.desinventar.net/DesInventar/download/DI_export_vnm.zip",
   "source_sha256": "8bbfb7d0dc4443e08962fa167aa34335d0b9722c2627821825dd2a0460cdd200",
-  "retrieved_at": "2026-07-17T20:23:33.169262+07:00",
+  "retrieved_at": "2026-07-17T20:52:34.355508+07:00",
   "locations_sha256": "1466c0d4efdf16b2d870c11d215d04f2c4da52ad6858ad590989555642406118",
   "accepted_rows": 7,
   "rejected_rows": 1463,
-  "eligibility": "Điện Biên province and complete valid event date",
+  "eligibility": "Điện Biên inventory only; ERA5 requires independent day-level date verification",
+  "era5_eligible_rows": 0,
   "admin_matching": "accent-insensitive normalized exact match",
-  "rejected_path": "desinventar_events.rejected.parquet"
+  "rejected_path": "desinventar_events.rejected.parquet",
+  "accepted_sha256": "9a4b1c4dea2577cf3d860890db6127d73d30e415a29e16a014542b6dcae393f1",
+  "rejected_sha256": "72aeadd12a51b61da79fb07fc548387cec75a4d6c58a3a7d8a8296355205dd91"
 }

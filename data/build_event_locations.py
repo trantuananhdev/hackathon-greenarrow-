@@ -90,6 +90,7 @@ def build_event_locations(
         "selection_purpose": (
             "Spatial context for province-level events; never independent labels"
         ),
+        "artifact_sha256": file_sha256(output_path),
     }
     manifest_path = output_path.with_suffix(".manifest.json")
     temporary_manifest = manifest_path.with_suffix(".json.tmp")

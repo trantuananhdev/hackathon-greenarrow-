@@ -189,9 +189,11 @@ def responses_to_frame(
     validate_event_part(
         combined,
         str(event["event_id"]),
-        set(locations["location_id"].astype(int)),
+        locations,
         window_start,
+        event_at,
         window_end,
+        str(event["spatial_precision"]),
     )
     return combined
 
@@ -199,11 +201,14 @@ def responses_to_frame(
 def validate_event_part(
     frame: pd.DataFrame,
     event_id: str,
-    expected_location_ids: set[int],
+    expected_locations: pd.DataFrame,
     window_start: pd.Timestamp,
+    event_at: pd.Timestamp,
     window_end: pd.Timestamp,
+    spatial_precision: str,
     max_grid_distance_km: float = 50.0,
 ) -> None:
+    expected_location_ids = set(expected_locations["location_id"].astype(int))
     required = {
         "event_id", "location_id", "time", "event_at", "window_start",
         "window_end", "training_feature_eligible", "spatial_precision",
@@ -218,12 +223,38 @@ def validate_event_part(
         raise ValueError("Part không có bản ghi")
     if set(frame["event_id"].astype(str)) != {event_id}:
         raise ValueError("event_id trong part không khớp")
+    if set(frame["model"].astype(str)) != {MODEL}:
+        raise ValueError("model trong part không khớp")
+    if set(frame["spatial_precision"].astype(str)) != {spatial_precision}:
+        raise ValueError("spatial_precision trong part không khớp")
+    if frame["event_at"].nunique() != 1 or frame["event_at"].iloc[0] != event_at:
+        raise ValueError("event_at trong part không khớp")
+    if frame["window_start"].nunique() != 1 or frame["window_start"].iloc[0] != window_start:
+        raise ValueError("window_start trong part không khớp")
+    if frame["window_end"].nunique() != 1 or frame["window_end"].iloc[0] != window_end:
+        raise ValueError("window_end trong part không khớp")
     if set(frame["location_id"].astype(int)) != expected_location_ids:
         raise ValueError("location_id trong part không đủ coverage")
+    expected_by_id = expected_locations.set_index("location_id")
     if frame.duplicated(["event_id", "location_id", "time", "model"]).any():
         raise ValueError("Part có khóa sự kiện/thời gian trùng")
     expected_hours = int((window_end - window_start).total_seconds() / 3600) + 1
     for location_id, group in frame.groupby("location_id"):
+        expected = expected_by_id.loc[int(location_id)]
+        for column, master_column in [
+            ("requested_latitude", "latitude"),
+            ("requested_longitude", "longitude"),
+        ]:
+            values = group[column].astype(float)
+            if values.nunique(dropna=False) != 1 or not np.isclose(
+                values.to_numpy(),
+                float(expected[master_column]),
+                rtol=0,
+                atol=1e-9,
+            ).all():
+                raise ValueError(
+                    f"location_id {int(location_id)} không khớp location master"
+                )
         times = group["time"].sort_values()
         if len(times) != expected_hours or times.nunique() != expected_hours:
             raise ValueError(
@@ -273,6 +304,14 @@ def validate_inputs(events: pd.DataFrame, locations: pd.DataFrame) -> None:
         raise ValueError("event_id chứa ký tự không an toàn cho partition")
     if events[list(EVENT_REQUIRED_COLUMNS)].isna().any().any():
         raise ValueError("Các cột event bắt buộc không được rỗng")
+    if "record_eligible_for_era5" not in events:
+        raise ValueError("Events thiếu record_eligible_for_era5")
+    if not pd.api.types.is_bool_dtype(events["record_eligible_for_era5"]):
+        raise ValueError("record_eligible_for_era5 phải có kiểu boolean")
+    if not events["record_eligible_for_era5"].astype(bool).all():
+        raise ValueError(
+            "ERA5 windows chỉ nhận sự kiện đã xác minh độ chính xác cấp ngày"
+        )
     if locations.empty or locations["location_id"].isna().any() or not locations["location_id"].is_unique:
         raise ValueError("location_id phải có giá trị và không trùng")
     if not locations["latitude"].between(-90, 90).all():
@@ -329,9 +368,11 @@ def write_part(
     frame: pd.DataFrame,
     path: Path,
     event_id: str,
-    expected_ids: set[int],
+    expected_locations: pd.DataFrame,
     window_start: pd.Timestamp,
+    event_at: pd.Timestamp,
     window_end: pd.Timestamp,
+    spatial_precision: str,
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(".parquet.tmp")
@@ -339,9 +380,11 @@ def write_part(
     validate_event_part(
         pd.read_parquet(temporary),
         event_id,
-        expected_ids,
+        expected_locations,
         window_start,
+        event_at,
         window_end,
+        spatial_precision,
     )
     temporary.replace(path)
 
@@ -376,11 +419,16 @@ def download_event_weather(
         start, event_at, end = event_window(event["event_date"], pre_hours, post_hours)
         for batch_index, location_batch in batched(locations, batch_size):
             path = event_dir / f"part-{batch_index:03d}.parquet"
-            expected_ids = set(location_batch["location_id"].astype(int))
             if path.exists():
                 try:
                     validate_event_part(
-                        pd.read_parquet(path), event_id, expected_ids, start, end
+                        pd.read_parquet(path),
+                        event_id,
+                        location_batch,
+                        start,
+                        event_at,
+                        end,
+                        str(event["spatial_precision"]),
                     )
                     skipped += 1
                     continue
@@ -401,7 +449,16 @@ def download_event_weather(
                 end,
                 pd.Timestamp.now(tz=TIMEZONE),
             )
-            write_part(frame, path, event_id, expected_ids, start, end)
+            write_part(
+                frame,
+                path,
+                event_id,
+                location_batch,
+                start,
+                event_at,
+                end,
+                str(event["spatial_precision"]),
+            )
             downloaded += 1
             time.sleep(request_delay)
         atomic_json(
@@ -415,6 +472,18 @@ def download_event_weather(
             },
         )
     return downloaded, skipped
+
+
+def validate_configuration(
+    batch_size: int,
+    request_delay: float,
+    pre_hours: int,
+    post_hours: int,
+) -> None:
+    if batch_size <= 0 or request_delay < 0 or pre_hours < 0 or post_hours < 0:
+        raise ValueError(
+            "Batch/window phải không âm và batch_size phải lớn hơn 0"
+        )
 
 
 def main() -> None:
@@ -432,6 +501,12 @@ def main() -> None:
     parser.add_argument("--post-hours", type=int, default=48)
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
+    validate_configuration(
+        args.batch_size,
+        args.request_delay,
+        args.pre_hours,
+        args.post_hours,
+    )
     events = pd.read_parquet(args.events)
     locations = pd.read_parquet(args.locations)
     validate_inputs(events, locations)
