@@ -5,6 +5,8 @@ logfire
 faiss-cpu
 langchain
 langchain-community
+langchain-text-splitters
 langchain-google-genai
+google-genai
 python-dotenv
 rich

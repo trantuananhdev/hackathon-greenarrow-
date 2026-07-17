@@ -10,8 +10,18 @@ from app.rag.policy_engine import rag_engine
 from app.agents.dispatcher import agent
 from rich.console import Console
 
+from fastapi.middleware.cors import CORSMiddleware
+
 console = Console()
 app = FastAPI(title="DBWAS Backend API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Mô hình dữ liệu đầu vào dựa trên output_model_sample.json
 class PredictionItem(BaseModel):
