@@ -20,8 +20,8 @@
 1. **Mission:** AI-first autonomous development + hackathon 48h ops
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
-4. **Current Task:** DATA-LAYOUT-005
-5. **Current Step:** Đang tách artifact khỏi code và phân cấp pipeline build/download/transform/verify/test
+4. **Current Task:** —
+5. **Current Step:** P4 vẫn block chờ ngày sự kiện xác minh; code/data đã được phân cấp và verify tại commit 0820f09
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`
@@ -34,6 +34,7 @@
 ## 📋 Recent Decisions (last 5)
 | When | Decision | By | Reference |
 |------|----------|----|-----------|
+| 2026-07-17 | Tách artifact theo domain khỏi package pipeline và test phản chiếu | human+ai | ADR-006 |
 | 2026-07-17 | Ưu tiên vertical slice Forecast → Risk → Alert; ERA5 bulk chuyển backlog | human | ADR-005 |
 | 2026-07-17 | Scope hackathon giảm còn 2021-2025, phân vùng quý, bỏ wind_gusts_10m | human | ADR-004 |
 | 2026-07-17 | Dữ liệu lịch sử dùng ERA5 + Parquet fact chỉ giữ location_id | human+ai | ADR-003 |

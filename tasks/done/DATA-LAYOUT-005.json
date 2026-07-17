@@ -12,5 +12,15 @@
     "Artifact được phân nhóm reference, features và events",
     "Toàn bộ unit test và verify gate hiện có chạy thành công",
     "Tài liệu và lệnh resume dùng đường dẫn mới"
-  ]
+  ],
+  "results": {
+    "commit": "0820f09",
+    "tests": "58 passed",
+    "verify_gates": [
+      "Weather alert: 85 locations, 32640 forecast rows, 45 overview rows",
+      "GloFAS: 12 points, 360 flood rows, 12 signals",
+      "Event inventory: 7 events, 0 date-verified, incomplete-weather gate passed"
+    ],
+    "structure": "Không còn Python/notebook dưới data và không còn import hoặc đường dẫn tài liệu cũ"
+  }
 }
