@@ -1,49 +1,58 @@
-import os
-from langchain_community.vectorstores import FAISS
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from typing import List, Dict
+
+class _Document:
+    """Lưu một đoạn văn bản chỉ đạo và metadata."""
+    def __init__(self, text: str, metadata: dict):
+        self.page_content = text
+        self.metadata = metadata
 
 class PolicyRAGEngine:
+    """
+    RAG Engine đơn giản dùng keyword search trong bộ nhớ.
+    Thay thế FAISS + Google Embeddings để tránh lỗi API 404.
+    Interface công khai giữ nguyên: add_document() và check_urgent_policy().
+    """
     def __init__(self):
-        # Yêu cầu phải có biến môi trường GOOGLE_API_KEY hoặc GEMINI_API_KEY
-        api_key = os.getenv("GEMINI_API_KEY")
-        if not api_key:
-            print("[CẢNH BÁO] Chưa cấu hình GEMINI_API_KEY. RAG sẽ không hoạt động.")
-            
-        self.embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/text-embedding-004", 
-            google_api_key=api_key
-        )
-        self.vector_store = None
-        self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500,
-            chunk_overlap=50
-        )
-        
+        self._documents: List[_Document] = []
+        print("[RAG Engine] Khởi tạo In-Memory Keyword Search Engine.")
+
     def add_document(self, text: str, metadata: dict = None):
-        """Thêm văn bản chỉ đạo khẩn vào FAISS In-Memory"""
+        """Thêm văn bản chỉ đạo khẩn vào bộ nhớ (chunk theo dấu câu)."""
         if metadata is None:
             metadata = {}
-        
-        chunks = self.text_splitter.create_documents([text], metadatas=[metadata])
-        
-        if self.vector_store is None:
-            self.vector_store = FAISS.from_documents(chunks, self.embeddings)
-        else:
-            self.vector_store.add_documents(chunks)
-            
-        print(f"[RAG Engine] Đã load {len(chunks)} chunks vào VectorDB (FAISS).")
-        
+        # Chia nhỏ thô theo 500 ký tự, overlap 50
+        chunk_size = 500
+        overlap = 50
+        chunks = []
+        start = 0
+        while start < len(text):
+            end = min(start + chunk_size, len(text))
+            chunks.append(text[start:end])
+            start = end - overlap if end < len(text) else end
+
+        for chunk in chunks:
+            self._documents.append(_Document(text=chunk, metadata=metadata))
+
+        print(f"[RAG Engine] Đã load {len(chunks)} chunks vào In-Memory Store.")
+
     def check_urgent_policy(self, query: str, k: int = 2) -> str:
-        """Kiểm tra xem có văn bản nào match với hoàn cảnh thời tiết hiện tại không"""
-        if self.vector_store is None:
+        """Tìm văn bản liên quan bằng keyword matching (đơn giản, không cần API)."""
+        if not self._documents:
             return "Không có văn bản chỉ đạo khẩn nào trong hệ thống."
-            
-        docs = self.vector_store.similarity_search(query, k=k)
-        if not docs:
+
+        query_words = set(query.lower().split())
+
+        def score(doc: _Document) -> int:
+            content_lower = doc.page_content.lower()
+            return sum(1 for w in query_words if w in content_lower)
+
+        ranked = sorted(self._documents, key=score, reverse=True)
+        top_docs = ranked[:k]
+
+        if not top_docs or score(top_docs[0]) == 0:
             return "Không tìm thấy quy định nào liên quan."
-            
-        context = "\n\n".join([f"Trích xuất: {d.page_content}" for d in docs])
+
+        context = "\n\n".join([f"Trích xuất: {d.page_content}" for d in top_docs])
         return context
 
 # Singleton instance

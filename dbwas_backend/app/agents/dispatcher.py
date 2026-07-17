@@ -1,23 +1,63 @@
 import os
-from pydantic_ai import Agent, RunContext
+import httpx
+from typing import Any
+
+# Dummy RunContext để giữ nguyên signature các hàm tool bên dưới
+class RunContext:
+    pass
+
 from rich.console import Console
 from rich.table import Table
 from app.rag.policy_engine import rag_engine
 
 console = Console()
 
-# Cấu hình PydanticAI dùng Gemini 1.5 Flash (Nhanh, Free)
-# Lưu ý: pydantic_ai tự động đọc GEMINI_API_KEY từ environment
-agent = Agent(
-    'gemini-1.5-flash',
-    system_prompt=(
-        "Bạn là trí tuệ nhân tạo điều phối cảnh báo thời tiết cực đoan của tỉnh Điện Biên. "
-        "Nhiệm vụ của bạn là nhận thông tin thời tiết đầu vào và quyết định kênh phân phối phù hợp. "
-        "LUÔN KIỂM TRA văn bản chỉ đạo khẩn cấp (RAG) trước khi ra quyết định. Nếu có chỉ đạo, phải TUÂN THỦ TUYỆT ĐỐI. "
-        "Dùng các tool: send_sms, send_zalo, trigger_auto_call, translate_text để gửi tin nhắn. "
-        "Đối với vùng dân tộc thiểu số, hãy ưu tiên dùng auto-call."
-    )
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/interactions"
+GEMINI_MODEL = "gemini-2.5-flash"
+SYSTEM_PROMPT = (
+    "Bạn là trí tuệ nhân tạo điều phối cảnh báo thời tiết cực đoan của tỉnh Điện Biên. "
+    "Nhiệm vụ của bạn là nhận thông tin thời tiết đầu vào và quyết định kênh phân phối phù hợp. "
+    "LUÔN KIỂM TRA văn bản chỉ đạo khẩn cấp (RAG) trước khi ra quyết định. Nếu có chỉ đạo, phải TUÂN THỦ TUYỆT ĐỐI. "
+    "Dùng các tool: send_sms, send_zalo, trigger_auto_call, translate_text để gửi tin nhắn. "
+    "Đối với vùng dân tộc thiểu số, hãy ưu tiên dùng auto-call."
 )
+
+class _Result:
+    """Wrapper để giữ nguyên interface result.data như cũ."""
+    def __init__(self, data: str):
+        self.data = data
+
+class GeminiAgent:
+    """
+    Thay thế pydantic_ai.Agent bằng cách gọi HTTP API trực tiếp
+    tới endpoint v1beta/interactions của Gemini.
+    """
+    def tool(self, func):
+        """No-op decorator để giữ nguyên các @agent.tool bên dưới."""
+        return func
+
+    def run_sync(self, user_prompt: str) -> _Result:
+        api_key = os.getenv("GEMINI_API_KEY")
+        full_input = f"{SYSTEM_PROMPT}\n\n{user_prompt}"
+        response = httpx.post(
+            GEMINI_API_URL,
+            headers={
+                "x-goog-api-key": api_key,
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": GEMINI_MODEL,
+                "input": full_input,
+            },
+            timeout=60.0,
+        )
+        response.raise_for_status()
+        payload = response.json()
+        # Trích xuất text từ response
+        text = payload.get("output", "") or str(payload)
+        return _Result(data=text)
+
+agent = GeminiAgent()
 
 @agent.tool
 def query_urgent_policy(ctx: RunContext, weather_condition: str) -> str:
