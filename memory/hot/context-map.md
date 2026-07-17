@@ -20,8 +20,8 @@
 1. **Mission:** AI-first autonomous development + hackathon 48h ops
 2. **Quarter OKR:** (fill after onboarding product)
 3. **Sprint Goal:** (fill)
-4. **Current Task:** —
-5. **Current Step:** P4 parser/inventory đã chốt; task bị block vì 0/7 ngày sự kiện được xác minh và Open-Meteo Archive trả HTTP 429
+4. **Current Task:** DATA-LAYOUT-005
+5. **Current Step:** Đang tách artifact khỏi code và phân cấp pipeline build/download/transform/verify/test
 
 ## ⚠️ Must Remember
 - Master guide: `docs/onboarding/HUONG-DAN-SU-DUNG.md`
@@ -37,8 +37,8 @@
 | 2026-07-17 | Ưu tiên vertical slice Forecast → Risk → Alert; ERA5 bulk chuyển backlog | human | ADR-005 |
 | 2026-07-17 | Scope hackathon giảm còn 2021-2025, phân vùng quý, bỏ wind_gusts_10m | human | ADR-004 |
 | 2026-07-17 | Dữ liệu lịch sử dùng ERA5 + Parquet fact chỉ giữ location_id | human+ai | ADR-003 |
-| 2026-07-17 | Chuẩn hóa thời gian dự báo sang Asia/Ho_Chi_Minh (UTC+7) | human+ai | data/setup_data.ipynb |
-| 2026-07-17 | Ánh xạ đơn vị mới phải theo NQ 1661, không theo các đính chính thứ cấp mâu thuẫn | ai | data/build_locations_parquet.py |
+| 2026-07-17 | Chuẩn hóa thời gian dự báo sang Asia/Ho_Chi_Minh (UTC+7) | human+ai | notebooks/setup_data.ipynb |
+| 2026-07-17 | Ánh xạ đơn vị mới phải theo NQ 1661, không theo các đính chính thứ cấp mâu thuẫn | ai | pipeline/build/build_locations_parquet.py |
 | 2026-07-17 | Tách tọa độ khỏi notebook; SQLite ban đầu đã được Parquet supersede | human+ai | ADR-003 |
 | 2026-07-17 | Phase 7 auto-next sau /done | human+ai | WORKFLOW.md |
 | 2026-07-17 | Master guide HUONG-DAN-SU-DUNG | human+ai | docs/onboarding/ |

@@ -10,16 +10,16 @@
 
 | Field | Value |
 |-------|-------|
-| Project Name | [...] |
-| Type | [Web App / API / CLI / Library / Mobile / Monorepo / ...] |
-| Primary Language | [...] |
-| Framework | [...] |
-| Database | [...] |
+| Project Name | Green Arrow — Điện Biên Weather Alert |
+| Type | Data pipeline / CLI / notebook |
+| Primary Language | Python 3.10 |
+| Framework | pandas + PyArrow |
+| Database | Parquet |
 | Cache | [...] |
 | Message Queue | [...] |
 | Hosting | [...] |
 | CI/CD | [...] |
-| Status | [Ideation / Design / Development / Staging / Production] |
+| Status | Development |
 
 ---
 
@@ -27,25 +27,27 @@
 
 ```
 project-root/
-├── [src-or-app]/
-│   ├── [module-A]/          # [short explanation]
-│   │   ├── [file]           # [what it does]
-│   │   └── [file.test]      # corresponding test
-│   ├── [module-B]/
-│   └── [shared/common]/     # Shared utilities
-├── [tests/]
-│   ├── unit/
-│   ├── integration/
-│   └── e2e/
-├── [docs/]
-├── [scripts/]               # Build, deploy, migration scripts
-├── [architecture/]          # This workflow system
-└── [config files]
+├── pipeline/
+│   ├── build/               # build reference/master datasets
+│   ├── download/            # external-source adapters
+│   ├── transform/           # alerts and derived signals
+│   ├── verify/              # artifact verification gates
+│   └── shared/              # contracts and parsers
+├── tests/pipeline/          # mirrors pipeline modules
+├── data/
+│   ├── reference/
+│   ├── features/
+│   ├── weather/
+│   ├── hydrology/
+│   └── events/
+├── notebooks/
+├── docs/
+└── architecture/
 ```
 
 **Key rules:**
 - Each module is a separate folder
-- Test files live next to the files they test (not in a separate directory)
+- Pipeline tests mirror the production module hierarchy under `tests/pipeline/`
 - Shared code → `shared/` or `common/`, never copy-paste between modules
 - Do not create files outside this structure without an ADR
 

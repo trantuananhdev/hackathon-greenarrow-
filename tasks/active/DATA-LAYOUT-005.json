@@ -1,0 +1,16 @@
+{
+  "id": "DATA-LAYOUT-005",
+  "title": "Phân cấp data pipeline và tách artifact khỏi code",
+  "scope": [
+    "Chỉ giữ dataset và manifest dưới data/",
+    "Tách build, download, transform và verify thành các module riêng",
+    "Chuyển test sang tests/pipeline theo cùng phân cấp",
+    "Cập nhật import, CLI, notebook và tài liệu mà không đổi hành vi pipeline"
+  ],
+  "acceptance_criteria": [
+    "Không còn file Python hoặc notebook nằm trực tiếp trong data/",
+    "Artifact được phân nhóm reference, features và events",
+    "Toàn bộ unit test và verify gate hiện có chạy thành công",
+    "Tài liệu và lệnh resume dùng đường dẫn mới"
+  ]
+}

@@ -1,20 +1,24 @@
 # Generated weather datasets and download logs
-data/weather_history/
-data/weather_history_full/
-data/forecast/
-data/alerts/
-data/flood/
-data/flood_signals.parquet
-data/flood_signals.manifest.json
-data/raw/desinventar/
-data/desinventar_events.rejected.parquet
-data/event_weather/
-data/*_download.log
-data/*_download.error.log
+data/weather/history/
+data/weather/history_full/
+data/weather/forecast/
+data/weather/alerts/
+data/hydrology/flood/
+data/hydrology/flood_signals.parquet
+data/hydrology/flood_signals.manifest.json
+data/events/raw/
+data/events/desinventar_events.rejected.parquet
+data/events/weather/
+data/**/*_download.log
+data/**/*_download.error.log
 
 # Superseded local SQLite artifact (Parquet is the current source)
-data/dien_bien_locations.db
+data/legacy/
+data/cache/
 data/.cache*
+# Compatibility: these two legacy files may remain locked by an open notebook.
+data/dien_bien_locations.db
+data/.cache.sqlite
 
 # Python caches
 __pycache__/

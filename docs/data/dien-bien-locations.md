@@ -1,6 +1,6 @@
 # Dữ liệu thời tiết và địa danh Điện Biên
 
-`data/dien_bien_locations.parquet` lưu tọa độ điểm trung tâm của 85 đơn vị hành
+`data/reference/dien_bien_locations.parquet` lưu tọa độ điểm trung tâm của 85 đơn vị hành
 chính cũ và tên đơn vị mới tương ứng sau sắp xếp tháng 7/2025.
 
 Ánh xạ tên mới được hiệu chỉnh theo Nghị quyết
@@ -25,16 +25,16 @@ thiếu; các đơn vị này được đánh dấu `missing_location_data`.
 
 ## Dữ liệu lịch sử
 
-`data/download_historical_weather.py` tải ERA5 theo giờ cho giai đoạn
+`pipeline/download/download_historical_weather.py` tải ERA5 theo giờ cho giai đoạn
 2021–2025 và ghi
-`data/weather_history/year=YYYY/q=QX/part-NNN.parquet`.
+`data/weather/history/year=YYYY/q=QX/part-NNN.parquet`.
 
 - Múi giờ: `Asia/Ho_Chi_Minh` (`UTC+7`).
 - Số điểm: 85.
 - Số dòng dự kiến: 3.725.040.
 - Model: ERA5, dùng thống nhất cho toàn bộ giai đoạn.
 - Đơn vị và fingerprint cấu hình được lưu trong
-  `data/weather_history/_manifest.json`.
+  `data/weather/history/_manifest.json`.
 - Mỗi request tải một quý cho tối đa 10 điểm; nghỉ mặc định 60 giây.
 - Part được ghi qua file tạm, kiểm tra số giờ, khóa trùng và biến rỗng trước
   khi publish. Chạy lại lệnh sẽ kiểm tra rồi bỏ qua các part hợp lệ.
@@ -42,19 +42,19 @@ thiếu; các đơn vị này được đánh dấu `missing_location_data`.
 ## Tạo lại danh mục địa danh
 
 ```powershell
-python data/build_locations_parquet.py <pasted-text.txt> data/dien_bien_locations.parquet
+python -m pipeline.build.build_locations_parquet <pasted-text.txt> data/reference/dien_bien_locations.parquet
 ```
 
 ## Tải hoặc resume lịch sử
 
 ```powershell
-python data/download_historical_weather.py
+python -m pipeline.download.download_historical_weather
 ```
 
 Nếu thư mục output còn manifest/layout cũ không tương thích, chạy một lần:
 
 ```powershell
-python data/download_historical_weather.py --reset-incompatible
+python -m pipeline.download.download_historical_weather --reset-incompatible
 ```
 
 Flag này chỉ hoạt động khi manifest xác nhận đúng dataset Điện Biên, sau đó xóa
@@ -65,7 +65,7 @@ trong notebook; chỉ chạy thủ công sau khi đã xác nhận cần bỏ dat
 Kiểm tra toàn bộ dataset sau khi tải:
 
 ```powershell
-python data/verify_weather_history.py
+python -m pipeline.verify.verify_weather_history
 ```
 
 Đọc thử mà không nạp toàn bộ dataset vào RAM:
@@ -74,7 +74,7 @@ python data/verify_weather_history.py
 import pyarrow.dataset as ds
 
 dataset = ds.dataset(
-    "data/weather_history",
+    "data/weather/history",
     format="parquet",
     partitioning="hive",
 )
@@ -83,7 +83,7 @@ preview = dataset.head(100).to_pandas()
 
 ## Điểm sông cho GloFAS
 
-Điểm sông là master độc lập tại `data/river_points.parquet`, dùng
+Điểm sông là master độc lập tại `data/reference/river_points.parquet`, dùng
 `river_point_id` thay vì `location_id`. Mười hai điểm hiện tại là node thật lấy từ
 ba OSM ways của Nậm Rốm, Nậm Mức và Nậm Lay; chúng không đại diện cho tâm xã và
 không được dùng để suy ra trực tiếp đơn vị hành chính.

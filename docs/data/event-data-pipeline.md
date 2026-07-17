@@ -60,10 +60,10 @@ date precision cũng gặp HTTP 429; không có weather part nào được coi l
 Sau khi ngày đã được xác minh và inventory được cập nhật có provenance, chạy:
 
 ```powershell
-python data/download_event_weather.py `
-  --events data/desinventar_events.parquet `
-  --locations data/event_locations.parquet `
-  --output data/event_weather `
+python -m pipeline.download.download_event_weather `
+  --events data/events/desinventar_events.parquet `
+  --locations data/events/event_locations.parquet `
+  --output data/events/weather `
   --batch-size 6 `
   --request-delay 60
 ```
@@ -71,11 +71,11 @@ python data/download_event_weather.py `
 Verify inventory hiện tại:
 
 ```powershell
-python data/verify_event_data.py --allow-incomplete-weather
+python -m pipeline.verify.verify_event_data --allow-incomplete-weather
 ```
 
 Verify đầy đủ sau khi có ít nhất một event đủ điều kiện và tải xong:
 
 ```powershell
-python data/verify_event_data.py
+python -m pipeline.verify.verify_event_data
 ```

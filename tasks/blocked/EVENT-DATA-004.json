@@ -38,6 +38,6 @@
       "DesInventar day/month components contain default values contradicted by source comments; an independent source is required to verify exact event dates.",
       "Open-Meteo Archive returned HTTP 429 during both live attempts; no weather part was accepted as complete."
     ],
-    "resume_command": "python data/download_event_weather.py --events data/desinventar_events.parquet --locations data/event_locations.parquet --output data/event_weather --batch-size 6 --request-delay 60"
+    "resume_command": "python -m pipeline.download.download_event_weather --events data/events/desinventar_events.parquet --locations data/events/event_locations.parquet --output data/events/weather --batch-size 6 --request-delay 60"
   }
 }
